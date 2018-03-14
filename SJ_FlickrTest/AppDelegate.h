@@ -7,16 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
+
+// data storage
+#import "AllPhotos.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (readonly, strong) NSPersistentContainer *persistentContainer;
-
-- (void)saveContext;
-
+@property (nonatomic, retain) AllPhotos *firstRowData;
+@property (nonatomic, retain) AllPhotos *secondRowData;
+@property (nonatomic, retain) AllPhotos *publicFeedData;
 
 @end
 

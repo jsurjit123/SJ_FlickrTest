@@ -36,4 +36,35 @@
     }];
 }
 
+- (void)testDataTask
+{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    
+    
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURL *url = [NSURL URLWithString:@"http://www.apple.com"];
+    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        XCTAssertNil(error, @"dataTaskWithURL error %@", error);
+        
+        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+            NSInteger statusCode = [(NSHTTPURLResponse *) response statusCode];
+            XCTAssertEqual(statusCode, 200, @"status code was not 200; was %ld", statusCode);
+        }
+        
+        XCTAssert(data, @"data nil");
+        
+        // do additional tests on the contents of the `data` object here, if you want
+        
+        // when all done, signal the semaphore
+        
+        dispatch_semaphore_signal(semaphore);
+    }];
+    [task resume];
+    
+    long rc = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 60.0 * NSEC_PER_SEC));
+    XCTAssertEqual(rc, 0, @"network request timed out");
+}
+
 @end

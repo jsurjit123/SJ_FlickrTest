@@ -7,16 +7,47 @@
 //
 
 #import "AppDelegate.h"
-
-@interface AppDelegate ()
-
-@end
+#import "Reachability.h"
 
 @implementation AppDelegate
 
+@synthesize firstRowData;
+@synthesize secondRowData;
+@synthesize publicFeedData;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    /*
+     
+     SJ_FlickrTest
+     Key:
+     74783acb589ec78dd57662ccb255d3ea
+     
+     Secret:
+     e8d387963e7e799c
+     
+     */
+    
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//    [manager GET:@"https://api.flickr.com/services/rest"
+//      parameters:@{@"method":@"flickr.people.getPublicPhotos",
+//                   @"api_key":flickrApiKey,
+//                   @"user_id":flickrUserId,
+//                   @"format":@"json",
+//                   @"nojsoncallback":@"1"}
+//         success:^(AFHTTPRequestOperation *operation, id responseObject)
+//     {
+//         NSLog(@"JSON: %@", responseObject);
+//         CGFloat total = [[responseObject objectForKey:@"photos.total"] floatValue];
+//         flickrPhotos = [responseObject objectForKey:@"photos.photo"];
+//         
+//         NSLog(@"total : %f", total);
+//         [self.animationCollectionView reloadData];
+//     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//         NSLog(@"Error: %@", error.localizedDescription);
+//     }];
+    
     return YES;
 }
 
@@ -46,53 +77,54 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
-    [self saveContext];
+
 }
 
 
-#pragma mark - Core Data stack
 
-@synthesize persistentContainer = _persistentContainer;
+/*
+ 
+https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3c03078e77027f6dff150def60771df4
+                                                                 &text=bmw
+                                                                 &sort=date-posted-asc
+                                                                 &privacy_filter=1
+                                                                 &extras=url_s
+                                                                 &per_page=5
+                                                                 &page=1
+                                                                 &format=json
+                                                                 &nojsoncallback=1
+                                                                 &auth_token=72157666705214808-1df855d8f5ba720d
+                                                                 &api_sig=47dc8009bfac1a384625c744c884edac
+ 
+ 
+ {"photos":{"page":1,"pages":67192,"perpage":5,"total":"335959","photo":[
+ 
+ {
+ "id":"14952437135",
+ "owner":"125684736@N04",
+ "secret":"7d0fc79cbb",
+ "server":"3891",
+ "farm":4,
+ "title":"BMW",
+ "ispublic":1,
+ "isfriend":0,
+ "isfamily":0,
+ "url_o":"https:\/\/farm4.staticflickr.com\/3891\/14952437135_4308b7a256_o.jpg",
+ "height_o":"1061",
+ "width_o":"1600"
+ 
+ },
+ 
+ {"id":"1358259878","owner":"12833430@N05","secret":"1e899d043c","server":"1387","farm":2,"title":"BMW.jpg","ispublic":1,"isfriend":0,"isfamily":0,"url_o":"https:\/\/farm2.staticflickr.com\/1387\/1358259878_5c96c43643_o.jpg","height_o":"304","width_o":"461"},
+ {"id":"722528018","owner":"7147366@N04","secret":"82272f07a5","server":"1284","farm":2,"title":"Even the cops have BMWs!","ispublic":1,"isfriend":0,"isfamily":0,"url_o":"https:\/\/farm2.staticflickr.com\/1284\/722528018_6c8e7ef9f7_o.jpg","height_o":"395","width_o":"567"},
+ {"id":"1302343959","owner":"29909302@N00","secret":"37edc6ae19","server":"1017","farm":2,"title":"Wheel","ispublic":1,"isfriend":0,"isfamily":0,"url_o":"https:\/\/farm2.staticflickr.com\/1017\/1302343959_49de96f7e1_o.jpg","height_o":"480","width_o":"640"},
+ {"id":"1590586809","owner":"12369810@N00","secret":"c91c5314a2","server":"2397","farm":3,"title":"Dubai Airport near a BMW","ispublic":1,"isfriend":0,"isfamily":0,"url_o":"https:\/\/farm3.staticflickr.com\/2397\/1590586809_ff569e53fb_o.jpg","height_o":"239","width_o":"348"}]},"stat":"ok"}
+ 
+ 
+ */
 
-- (NSPersistentContainer *)persistentContainer {
-    // The persistent container for the application. This implementation creates and returns a container, having loaded the store for the application to it.
-    @synchronized (self) {
-        if (_persistentContainer == nil) {
-            _persistentContainer = [[NSPersistentContainer alloc] initWithName:@"SJ_FlickrTest"];
-            [_persistentContainer loadPersistentStoresWithCompletionHandler:^(NSPersistentStoreDescription *storeDescription, NSError *error) {
-                if (error != nil) {
-                    // Replace this implementation with code to handle the error appropriately.
-                    // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    
-                    /*
-                     Typical reasons for an error here include:
-                     * The parent directory does not exist, cannot be created, or disallows writing.
-                     * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                     * The device is out of space.
-                     * The store could not be migrated to the current model version.
-                     Check the error message to determine what the actual problem was.
-                    */
-                    NSLog(@"Unresolved error %@, %@", error, error.userInfo);
-                    abort();
-                }
-            }];
-        }
-    }
-    
-    return _persistentContainer;
-}
 
-#pragma mark - Core Data Saving support
 
-- (void)saveContext {
-    NSManagedObjectContext *context = self.persistentContainer.viewContext;
-    NSError *error = nil;
-    if ([context hasChanges] && ![context save:&error]) {
-        // Replace this implementation with code to handle the error appropriately.
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
-        abort();
-    }
-}
+
 
 @end
